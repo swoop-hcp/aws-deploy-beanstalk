@@ -18,8 +18,17 @@ echo "  S3 Bucket:   $S3_BUCKET"
 echo "  Application: $APPLICATION"
 echo "  Wait Time:   $WAIT"
 
-aws s3 cp "$APPLICATION" "s3://$S3_BUCKET/$APP_NAME/$VERSION.zip"
-aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$APP_NAME/$VERSION.zip" 
+EXISTS=$(aws elasticbeanstalk describe-application-versions \
+    --application-name $APP_NAME \
+    --version-labels $VERSION \
+    --query "ApplicationVersions[0].VersionLabel" \
+    --output text)
+if [ "$EXISTS" == "None" ]; then
+    aws s3 cp "$APPLICATION" "s3://$S3_BUCKET/$APP_NAME/$VERSION.zip"
+    aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$APP_NAME/$VERSION.zip" 
+else
+    echo "Aplication Version Label [$VERSION] already exists, using this one."
+fi
 
 SUCCESS=true
 aws elasticbeanstalk update-environment \
