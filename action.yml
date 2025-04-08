@@ -1,0 +1,25 @@
+name: "AWS Deploy to Beanstalk Environment"
+description: "Deploy to AWS using AWS CLI parameters"
+author: "Ricardo Lozano"
+inputs:
+  application_name:
+    required: true
+    description: "Elastic Beanstalk Application Name"
+  environment_name:
+    required: true
+    description: "Elastic Beanstalk Environment Name"
+  version_label:
+    required: true
+    description: "Version label to deploy"
+  aws_region:
+    required: true
+    description: "AWS Region"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.application_name }}
+    - ${{ inputs.environment_name }}
+    - ${{ inputs.version_label }}
+    - ${{ inputs.aws_region }}
