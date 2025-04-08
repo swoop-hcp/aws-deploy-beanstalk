@@ -14,6 +14,9 @@ inputs:
   aws_region:
     required: true
     description: "AWS Region"
+  wait:
+    required: true
+    description: "Wait time between status verification"
 
 runs:
   using: "docker"
