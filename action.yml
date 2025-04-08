@@ -26,3 +26,4 @@ runs:
     - ${{ inputs.environment_name }}
     - ${{ inputs.version_label }}
     - ${{ inputs.aws_region }}
+    - ${{ inputs.wait }}    
