@@ -7,8 +7,6 @@ RUN yum install -y unzip curl python3 jq && \
     yum clean all && \
     rm -rf awscliv2.zip aws/
 
-RUN which jq && jq --version
-
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
