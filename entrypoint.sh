@@ -36,7 +36,7 @@ while true; do
         exit 1
     fi
     echo "Deployment status: $STATUS. Waiting..."
-    sleep $WAIT
+    sleep "$WAIT"
 done
 ERRORS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME" --max-items 5 --query "Events[?contains(Message, 'Failed') || contains(Message, 'error') || contains(Message, 'Unsuccessful')].[EventDate, Message]" --output text)
 if [[ "$ERRORS" == "None" || -z "$ERRORS" ]]; then
