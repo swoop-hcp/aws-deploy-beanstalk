@@ -5,14 +5,21 @@ APP_NAME=$1
 ENV_NAME=$2
 VERSION=$3
 REGION=$4
-WAIT=$5
+S3_BUCKET=$5
+APPLICATION=$6
+WAIT=$7
 
 echo "Deploying to Elastic Beanstalk..."
 echo "  Application: $APP_NAME"
 echo "  Environment: $ENV_NAME"
 echo "  Version:     $VERSION"
 echo "  Region:      $REGION"
+echo "  S3 Bucket:   $S3_BUCKET"
+echo "  Application: $APPLICATION"
 echo "  Wait Time:   $WAIT"
+
+aws s3 cp "$APPLICATION" "s3://$S3_BUCKET/$APP_NAME/$VERSION.zip"
+aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$APP_NAME/$VERSION.zip" 
 
 SUCCESS=true
 aws elasticbeanstalk update-environment \

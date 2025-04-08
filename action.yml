@@ -14,6 +14,12 @@ inputs:
   aws_region:
     required: true
     description: "AWS Region"
+  s3_bucket:
+    required: true
+    description: "AWS S3 bucket for uploading app versions"
+  application:
+    required: true
+    description: "Application's zip file path"
   wait:
     required: true
     description: "Wait time between status verification"
@@ -26,4 +32,7 @@ runs:
     - ${{ inputs.environment_name }}
     - ${{ inputs.version_label }}
     - ${{ inputs.aws_region }}
-    - ${{ inputs.wait }}    
+    - ${{ inputs.s3_bucket }}
+    - ${{ inputs.application }}
+    - ${{ inputs.wait }}
+    
