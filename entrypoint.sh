@@ -52,7 +52,7 @@ while true; do
     #     aws elasticbeanstalk describe-events --environment-name "$ENV_NAME" --max-items 5
     #     exit 1
     # fi
-    LOGS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME"  --max-items 3)
+    LOGS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME"  --max-items 2)
     ERRORS=$(echo "$LOGS" | jq -r '.Events[] | select((.Message | test("Failed to deploy application")) or (.Severity == "Error")) | [.EventDate, .Severity, .Message] | @tsv')
     SUCCESS=$(echo "$LOGS" | jq -r '.Events[] | select((.Message | test("Environment update completed successfully"))) | [.EventDate, .Severity, .Message] | @tsv')
     if [[ -n "$ERRORS" ]]; then

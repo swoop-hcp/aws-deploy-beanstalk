@@ -26,7 +26,7 @@ inputs:
 
 runs:
   using: "docker"
-  image: docker://tihealth/aws-deploy-beanstalk:v1
+  image: docker://tihealth/aws-deploy-beanstalk:test
   args:
     - ${{ inputs.application_name }}
     - ${{ inputs.environment_name }}
