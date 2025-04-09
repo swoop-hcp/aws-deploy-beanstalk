@@ -42,23 +42,37 @@ while true; do
     STATUS=$(echo "$ENV_INFO" | jq -r '.Environments[0].Status')
     HEALTH=$(echo "$ENV_INFO" | jq -r '.Environments[0].Health')
     HEALTH_STATUS=$(echo "$ENV_INFO" | jq -r '.Environments[0].HealthStatus')
-    if [[ "$STATUS" == "Ready" && "$HEALTH" == "Green" ]]; then
-        SUCCESS=true
-    break
-    elif [[ "$HEALTH" == "Red" || "$HEALTH_STATUS" == "Degraded" ]]; then
-        SUCCESS=false
-        echo "Deployment failed!"
-        aws elasticbeanstalk describe-events --environment-name "$ENV_NAME" --max-items 5
+    # if [[ "$STATUS" == "Ready" && "$HEALTH" == "Green" ]]; then
+    #     SUCCESS=true
+    #     break
+    # elif [[ "$HEALTH" == "Red" || "$HEALTH_STATUS" == "Degraded" ]]; then
+    #     LOGS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME" --query "Events[?contains(Message, 'Failed') || contains(Severity, 'Error')].[EventDate, Message, Severity]" --max-items 3)
+    #     SUCCESS=false
+    #     echo "Deployment failed!"
+    #     aws elasticbeanstalk describe-events --environment-name "$ENV_NAME" --max-items 5
+    #     exit 1
+    # fi
+    LOGS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME"  --max-items 3)
+    ERRORS=$(echo "$LOGS" | jq -r '.Events[] | select((.Message | test("Failed to deploy application")) or (.Severity == "Error")) | [.EventDate, .Severity, .Message] | @tsv')
+    SUCCESS=$(echo "$LOGS" | jq -r '.Events[] | select((.Message | test("Environment update completed successfully"))) | [.EventDate, .Severity, .Message] | @tsv')
+    if [[ -n "$ERRORS" ]]; then
+        echo "❌ Deployment failed:"
+        echo "$ERRORS"
         exit 1
+    fi
+    if [[ -n "$SUCCESS" ]]; then
+        echo "✅ Deployment completed successfully."
+        echo "$SUCCESS"
+        exit 0
     fi
     echo "Deployment status: $STATUS. Waiting..."
     sleep "$WAIT"
 done
-ERRORS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME" --max-items 5 --query "Events[?contains(Message, 'Failed') || contains(Message, 'error') || contains(Message, 'Unsuccessful')].[EventDate, Message]" --output text)
-if [[ "$ERRORS" == "None" || -z "$ERRORS" ]]; then
-    echo "Deployment completed successfully."
-else
-    echo $ERRORS
-    echo "Deployment failed!"
-    exit 1
-fi
+# ERRORS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME" --max-items 3 --query "Events[?contains(Severity, 'Error') || contains(Message, 'Failed to deploy application')].[EventDate, Message]" --output text)
+# if [[ "$ERRORS" == "None" || -z "$ERRORS" ]]; then
+#     echo "Deployment completed successfully."
+# else
+#     echo $ERRORS
+#     echo "Deployment failed!"
+#     exit 1
+# fi
