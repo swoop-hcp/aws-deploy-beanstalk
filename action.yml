@@ -38,7 +38,7 @@ runs:
   using: "composite"
   steps:
     - run: |
-        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
         docker run tihealth/aws-deploy-beanstalk:v1 \
           ${{ inputs.application_name }} \
           ${{ inputs.environment_name }} \
@@ -48,11 +48,3 @@ runs:
           ${{ inputs.application }} \
           ${{ inputs.wait }}
       shell: bash
-  args:
-    - ${{ inputs.application_name }}
-    - ${{ inputs.environment_name }}
-    - ${{ inputs.version_label }}
-    - ${{ inputs.aws_region }}
-    - ${{ inputs.s3_bucket }}
-    - ${{ inputs.application }}
-    - ${{ inputs.wait }}
