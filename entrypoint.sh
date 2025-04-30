@@ -24,10 +24,11 @@ EXISTS=$(aws elasticbeanstalk describe-application-versions \
     --application-name $APP_NAME \
     --version-labels $VERSION \
     --query "ApplicationVersions[0].VersionLabel" \
+    --region $REGION \
     --output text)
 if [ "$EXISTS" == "None" ]; then
-    aws s3 cp "$APPLICATION" "s3://$S3_BUCKET/$APP_NAME/$VERSION.zip"
-    aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$APP_NAME/$VERSION.zip" 
+    aws s3 cp "$APPLICATION" "s3://$S3_BUCKET/$APP_NAME/$VERSION.zip" --region $REGION
+    aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$APP_NAME/$VERSION.zip"  --region $REGION
 else
     echo "Aplication Version Label [$VERSION] already exists, using this one."
 fi
