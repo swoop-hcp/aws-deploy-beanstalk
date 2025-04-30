@@ -18,6 +18,8 @@ echo "  S3 Bucket:   $S3_BUCKET"
 echo "  Application: $APPLICATION"
 echo "  Wait Time:   $WAIT"
 
+aws configure set region $REGION
+
 EXISTS=$(aws elasticbeanstalk describe-application-versions \
     --application-name $APP_NAME \
     --version-labels $VERSION \
