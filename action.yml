@@ -25,16 +25,6 @@ inputs:
     description: "Wait time between status verification"
 
 runs:
-  # using: "docker"
-  # image: docker://tihealth/aws-deploy-beanstalk:v1
-  # args:
-  #   - ${{ inputs.application_name }}
-  #   - ${{ inputs.environment_name }}
-  #   - ${{ inputs.version_label }}
-  #   - ${{ inputs.aws_region }}
-  #   - ${{ inputs.s3_bucket }}
-  #   - ${{ inputs.application }}
-  #   - ${{ inputs.wait }}
   using: "composite"
   steps:
     - run: |

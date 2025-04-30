@@ -9,8 +9,6 @@ S3_BUCKET=$5
 APPLICATION=$6
 WAIT=$7
 
-aws configure set region "$REGION"
-
 echo "Deploying to Elastic Beanstalk..."
 echo "  Application: $APP_NAME"
 echo "  Environment: $ENV_NAME"
@@ -20,14 +18,12 @@ echo "  S3 Bucket:   $S3_BUCKET"
 echo "  Application: $APPLICATION"
 echo "  Wait Time:   $WAIT"
 
-echo "First query to aws"
 EXISTS=$(aws elasticbeanstalk describe-application-versions \
     --application-name $APP_NAME \
     --version-labels $VERSION \
     --query "ApplicationVersions[0].VersionLabel" \
     --region "$REGION" \
     --output text)
-echo "Got response from first query"
 if [ "$EXISTS" == "None" ]; then
     aws s3 cp "$APPLICATION" "s3://$S3_BUCKET/$APP_NAME/$VERSION.zip" --region "$REGION"
     aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$APP_NAME/$VERSION.zip"  --region $REGION
