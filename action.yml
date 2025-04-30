@@ -39,7 +39,7 @@ runs:
   steps:
     - run: |
         echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        docker run tihealth/aws-deploy-beanstalk:v1 \
+        docker run tihealth/aws-deploy-beanstalk:v1.2 \
           ${{ inputs.application_name }} \
           ${{ inputs.environment_name }} \
           ${{ inputs.version_label }} \
