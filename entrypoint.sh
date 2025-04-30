@@ -20,15 +20,16 @@ echo "  S3 Bucket:   $S3_BUCKET"
 echo "  Application: $APPLICATION"
 echo "  Wait Time:   $WAIT"
 
-
+echo "First query to aws"
 EXISTS=$(aws elasticbeanstalk describe-application-versions \
     --application-name $APP_NAME \
     --version-labels $VERSION \
     --query "ApplicationVersions[0].VersionLabel" \
-    --region $REGION \
+    --region "$REGION" \
     --output text)
+echo "Got response from first query"
 if [ "$EXISTS" == "None" ]; then
-    aws s3 cp "$APPLICATION" "s3://$S3_BUCKET/$APP_NAME/$VERSION.zip" --region $REGION
+    aws s3 cp "$APPLICATION" "s3://$S3_BUCKET/$APP_NAME/$VERSION.zip" --region "$REGION"
     aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$APP_NAME/$VERSION.zip"  --region $REGION
 else
     echo "Aplication Version Label [$VERSION] already exists, using this one."
