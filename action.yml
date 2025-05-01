@@ -33,7 +33,7 @@ runs:
           -e AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" \
           -e AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" \
           -e AWS_REGION="$AWS_REGION" \
-          tihealth/aws-deploy-beanstalk:v1.2 \
+          swoophcp/aws-deploy-beanstalk:v1.2 \
           ${{ inputs.application_name }} \
           ${{ inputs.environment_name }} \
           ${{ inputs.version_label }} \
