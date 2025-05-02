@@ -26,28 +26,18 @@ EXISTS=$(aws elasticbeanstalk describe-application-versions \
     --output text)
 if [ "$EXISTS" == "None" ]; then
     # S3_KEY="$APP_NAME/$VERSION.zip"
-    # S3_APP_URL="s3://$S3_BUCKET/$APP_NAME/$VERSION.zip"
-    # echo "S3 Bucket: $S3_BUCKET, S3 Key: $S3_KEY"
-    # echo "S3 App URL: $S3_APP_URL"
-    # aws s3 cp "$APPLICATION" $S3_APP_URL    
+    # S3_FILE="s3://$S3_BUCKET/$S3_KEY"
 
-    # aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$S3_KEY"
-
-
-
-
-    S3_KEY="$APP_NAME/$VERSION.zip"
-    S3_FILE="s3://$S3_BUCKET/$S3_KEY"
-
-    echo "Uploading to s3 bucket"
-    aws s3 cp "$GITHUB_WORKSPACE/$APPLICATION" $S3_FILE
-    echo "Uploaded file $S3_FILE"
-    aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$S3_KEY" 
-    echo "Created app version $VERSION with S3Bucket=$S3_BUCKET,S3Key=$S3_KEY"
-
+    # echo "Uploading to s3 bucket"
+    # aws s3 cp "$GITHUB_WORKSPACE/$APPLICATION" $S3_FILE
+    # echo "Uploaded file $S3_FILE"
+    # aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$S3_KEY" 
+    # echo "Created app version $VERSION with S3Bucket=$S3_BUCKET,S3Key=$S3_KEY"
+    echo "Application Version Label doesn't exit! [$VERSION]"
+    exit 1
 
 else
-    echo "Aplication Version Label [$VERSION] already exists, using this one."
+    echo "Aplication Version Label valid! [$VERSION]"
 fi
 
 echo  "Uploaded file"
