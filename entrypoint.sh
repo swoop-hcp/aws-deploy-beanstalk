@@ -40,8 +40,6 @@ else
     echo "Aplication Version Label valid! [$VERSION]"
 fi
 
-echo  "Uploaded file"
-
 SUCCESS=true
 aws elasticbeanstalk update-environment \
   --application-name "$APP_NAME" \
