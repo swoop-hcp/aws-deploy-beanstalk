@@ -39,6 +39,9 @@ if [ "$EXISTS" == "None" ]; then
     S3_KEY="$APP_NAME/$VERSION.zip"
     S3_FILE="s3://$S3_BUCKET/$S3_KEY"
 
+    echo "list directory"
+    ls -lh
+    echo "uploading to s3 bucket"
     aws s3 cp $APPLICATION $S3_FILE
     echo "Uploaded file $S3_FILE"
     aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$S3_KEY" 
