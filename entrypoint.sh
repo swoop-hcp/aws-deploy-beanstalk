@@ -27,8 +27,8 @@ EXISTS=$(aws elasticbeanstalk describe-application-versions \
 if [ "$EXISTS" == "None" ]; then
     S3_KEY="$APP_NAME/$VERSION.zip"
     S3_APP_URL="s3://$S3_BUCKET/$APP_NAME/$VERSION.zip"
-    # echo "S3 Bucket: $S3_BUCKET, S3 Key: $S3_KEY"
-    # echo "S3 App URL: $S3_APP_URL"
+    echo "S3 Bucket: $S3_BUCKET, S3 Key: $S3_KEY"
+    echo "S3 App URL: $S3_APP_URL"
     aws s3 cp "$APPLICATION" $S3_APP_URL
 
     aws elasticbeanstalk create-application-version --application-name $APP_NAME --version-label $VERSION --source-bundle S3Bucket="$S3_BUCKET",S3Key="$S3_KEY"
