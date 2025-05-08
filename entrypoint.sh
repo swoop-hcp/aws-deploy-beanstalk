@@ -50,7 +50,7 @@ while true; do
     STATUS=$(echo "$ENV_INFO" | jq -r '.Environments[0].Status')
     HEALTH=$(echo "$ENV_INFO" | jq -r '.Environments[0].Health')
     HEALTH_STATUS=$(echo "$ENV_INFO" | jq -r '.Environments[0].HealthStatus')
-    LOGS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME"  --max-items 2)
+    LOGS=$(aws elasticbeanstalk describe-events --environment-name "$ENV_NAME"  --max-items 3)
     ERRORS=$(echo "$LOGS" | jq -r '.Events[] | select((.Message | test("Failed to deploy application")) or (.Severity == "Error")) | [.EventDate, .Severity, .Message] | @tsv')
     SUCCESS=$(echo "$LOGS" | jq -r '.Events[] | select((.Message | test("Environment update completed successfully"))) | [.EventDate, .Severity, .Message] | @tsv')
     if [[ -n "$ERRORS" ]]; then
