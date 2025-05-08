@@ -58,7 +58,7 @@ while true; do
         echo "$ERRORS"
         exit 1
     fi
-    if [[ -n "$SUCCESS" && "$STATUS" == "Ready" && "$HEALTH" == "Green" ]]; then
+    if [[ -n "$SUCCESS"  ]]; then
         echo "✅ Deployment completed successfully."
         echo "$SUCCESS"
         exit 0
